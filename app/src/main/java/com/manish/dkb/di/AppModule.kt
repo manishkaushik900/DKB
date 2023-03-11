@@ -6,14 +6,14 @@ import com.manish.dkb.BuildConfig
 import com.manish.dkb.MainApplication
 import com.manish.dkb.data.remote.ApiService
 import com.manish.dkb.data.source.NetworkAlbumDataSource
-import com.manish.dkb.utils.Network
-import com.manish.dkb.utils.NetworkConnectivity
+import com.manish.dkb.utils.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -48,13 +48,28 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        val okHttpClientBuilder = OkHttpClient().newBuilder()
-        okHttpClientBuilder.connectTimeout(CONNECTION_TIMEOUT.toLong(), TimeUnit.SECONDS)
-        okHttpClientBuilder.readTimeout(READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
-        okHttpClientBuilder.writeTimeout(WRITE_TIMEOUT.toLong(), TimeUnit.SECONDS)
-        return okHttpClientBuilder.build()
-    }
+    fun provideCacheInterceptor(): NetworkCacheInterceptor = NetworkCacheInterceptor()
+
+    @Provides
+    @Singleton
+    fun provideForceCacheInterceptor(networkConnectivity: NetworkConnectivity): OfflineCacheInterceptor =
+        OfflineCacheInterceptor(networkConnectivity.isNetworkAvailable())
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context,
+        cacheInterceptor: NetworkCacheInterceptor,
+        forceCacheInterceptor: OfflineCacheInterceptor
+    ): OkHttpClient = OkHttpClient().newBuilder()
+        .cache(Cache(context.cacheDir, 10L * 1024L * 1024L))// 10 MiB
+        .addNetworkInterceptor(cacheInterceptor)// only if Cache-Control header is not enabled from the server
+        .addInterceptor(forceCacheInterceptor)
+        .connectTimeout(CONNECTION_TIMEOUT.toLong(), TimeUnit.SECONDS)
+        .readTimeout(READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
+        .writeTimeout(WRITE_TIMEOUT.toLong(), TimeUnit.SECONDS)
+        .build()
+
 
     @Singleton
     @Provides
@@ -62,7 +77,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun providesNetworkDataSource(apiService: ApiService): NetworkAlbumDataSource = NetworkAlbumDataSource(apiService)
+    fun providesNetworkDataSource(apiService: ApiService): NetworkAlbumDataSource =
+        NetworkAlbumDataSource(apiService)
 
     @Provides
     @Singleton
@@ -71,5 +87,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNetworkConnectivity(@ApplicationContext context: Context): NetworkConnectivity = Network(context)
+    fun provideNetworkConnectivity(@ApplicationContext context: Context): NetworkConnectivity =
+        Network(context)
 }

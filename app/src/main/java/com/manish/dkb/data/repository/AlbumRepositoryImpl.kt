@@ -25,9 +25,9 @@ class AlbumRepositoryImpl @Inject constructor(
 
     /*common high order function to get the result*/
     private suspend fun <T> getResult(call: suspend () -> Response<T>): Resource<T> {
-        if (!network.isNetworkAvailable()) {
-            return error("No Internet Connection")
-        }
+//        if (!network.isNetworkAvailable()) {
+//            return error("No Internet Connection")
+//        }
 
         try {
             val response = call()

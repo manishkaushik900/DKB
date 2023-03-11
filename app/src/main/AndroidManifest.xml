@@ -8,7 +8,7 @@
 
     <application
         android:name=".MainApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -17,8 +17,16 @@
         android:theme="@style/Theme.DKB"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.AlbumDetailActivity"
-            android:exported="false" />
+            android:name=".presentation.ui.compose.AlbumComposeActivity"
+            android:exported="true"
+            android:label="@string/title_activity_album_compose"
+            android:theme="@style/Theme.DKB">
+         <!--   <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
         <activity
             android:name=".presentation.ui.AlbumActivity"
             android:exported="true">

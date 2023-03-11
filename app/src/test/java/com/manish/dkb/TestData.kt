@@ -26,15 +26,18 @@ val getAlbumListSuccessResponse = """
   }]
 """.trimIndent()
 
+val expectedResult: List<AlbumDtoItem>
+    get() = listOf(item1, item2)
+
 
 val getAlbumDetailsFailureResponse = """{}""".trimIndent()
 
 val getAlbumListFailureResponse = """{}""".trimIndent()
 
-val item1 = AlbumDtoItem(1,1, title = "test", thumbnailUrl = "https://via.placeholder.com/600/92c952",
-    url = "https://via.placeholder.com/150/92c952")
-val item2 = AlbumDtoItem(2,2, title = "test2", thumbnailUrl = "https://via.placeholder.com/600/92c9522",
-    url = "https://via.placeholder.com/150/92c9523")
+val item1 = AlbumDtoItem(1,1, title = "accusamus beatae ad facilis cum similique qui sunt", thumbnailUrl = "https://via.placeholder.com/150/92c952",
+    url = "https://via.placeholder.com/600/92c952")
+val item2 = AlbumDtoItem(1,2, title = "reprehenderit est deserunt velit ipsam", thumbnailUrl = "https://via.placeholder.com/150/771796",
+    url = "https://via.placeholder.com/600/771796")
 val item3= AlbumDtoItem(3,3, title = "test3", thumbnailUrl = "https://via.placeholder.com/600/92c9523",
     url = "https://via.placeholder.com/150/92c9523")
 val dummyAlbumListData = mutableListOf<AlbumDtoItem>(item1, item2, item3)

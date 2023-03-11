@@ -10,6 +10,7 @@
         android:name="com.manish.dkb.presentation.ui.AlbumFragment"
         android:label="Albums"
         tools:layout="@layout/fragment_album">
+
         <action
             android:id="@+id/action_albumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
@@ -19,5 +20,10 @@
         android:id="@+id/albumDetailFragment"
         android:name="com.manish.dkb.presentation.ui.AlbumDetailFragment"
         android:label="Album Detail"
-        tools:layout="@layout/fragment_album_detail" />
+        tools:layout="@layout/fragment_album_detail">
+        <argument
+            android:name="photoId"
+            app:argType="integer"
+           />
+    </fragment>
 </navigation>

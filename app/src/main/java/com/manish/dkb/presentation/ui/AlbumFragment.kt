@@ -4,21 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.google.android.material.snackbar.Snackbar
 import com.manish.dkb.R
 import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.databinding.FragmentAlbumBinding
 import com.manish.dkb.presentation.adapter.AlbumAdapter
 import com.manish.dkb.presentation.viewmodels.AlbumViewModel
+import com.manish.dkb.presentation.viewmodels.AlbumViewModel.AlbumUiState
 import com.manish.dkb.utils.NetworkConnectivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -60,13 +59,17 @@ class AlbumFragment: Fragment(), AlbumAdapter.AlbumItemListener {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    when (state) {
-                        is AlbumViewModel.AlbumUiState.AlbumListLoaded -> onAlbumListLoaded(state.albumList)
-                        is AlbumViewModel.AlbumUiState.Error -> showError(state.message)
-                        is AlbumViewModel.AlbumUiState.Loading -> showLoading()
-                    }
+                    renderState(state)
                 }
             }
+        }
+    }
+
+    fun renderState(state: AlbumUiState) {
+        when (state) {
+            is AlbumUiState.AlbumListLoaded -> onAlbumListLoaded(state.albumList)
+            is AlbumUiState.Error -> showError(state.message)
+            is AlbumUiState.Loading -> showLoading()
         }
     }
 
@@ -111,11 +114,14 @@ class AlbumFragment: Fragment(), AlbumAdapter.AlbumItemListener {
     /*On album list item click open the album details*/
     override fun onClickedAlbum(photoId: Int) {
         if (!networkConnectivity.isNetworkAvailable()) {
-            showError("No Internet Connection")
+            showError(getString(R.string.msg_no_internet))
             return
         }
-        val bundle = bundleOf("photoId" to photoId)
-        view?.findNavController()?.navigate(R.id.albumDetailFragment, bundle)
+//        val bundle = bundleOf("photoId" to photoId)
+//        view?.findNavController()?.navigate(R.id.albumDetailFragment, bundle)
+
+        val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(photoId)
+        findNavController().navigate(action)
 
     }
 

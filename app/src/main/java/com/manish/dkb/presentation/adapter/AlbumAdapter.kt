@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.databinding.AlbumItemRowBinding
+import com.manish.dkb.utils.loadProfilePhoto
 
 /*Adapter to populate the list to album fragment*/
-class AlbumAdapter(private val listener: AlbumItemListener) : RecyclerView.Adapter<AlbumViewHolder>() {
+class AlbumAdapter(private val listener: AlbumItemListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface AlbumItemListener {
         fun onClickedAlbum(photoId: Int)
@@ -33,8 +32,14 @@ class AlbumAdapter(private val listener: AlbumItemListener) : RecyclerView.Adapt
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) =
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is AlbumViewHolder -> {
+                holder.bind(items[position])
+            }
+        }
+    }
+
 }
 
 class AlbumViewHolder(
@@ -54,10 +59,7 @@ class AlbumViewHolder(
         this.albumItem = item
         itemBinding.title.text = item.title
         itemBinding.photoId.text = "${item.id}"
-        Glide.with(itemBinding.root)
-            .load(item.thumbnailUrl)
-            .transform(CircleCrop())
-            .into(itemBinding.image)
+        itemBinding.image.loadProfilePhoto(item.thumbnailUrl, itemBinding.image.context)
     }
 
     override fun onClick(v: View?) {

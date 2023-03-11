@@ -1,16 +1,17 @@
 package com.manish.dkb.data.repository
 
+import com.google.common.truth.Truth.assertThat
 import com.manish.dkb.*
 import com.manish.dkb.data.FakeNetworkConnectivity
 import com.manish.dkb.data.remote.ApiService
 import com.manish.dkb.data.source.NetworkAlbumDataSource
 import com.manish.dkb.utils.NetworkConnectivity
 import io.mockk.MockKAnnotations
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.assertj.core.api.Assertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +19,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class AlbumRepositoryImplTest{
+@ExperimentalCoroutinesApi
+class AlbumRepositoryImplTest {
     private val mockWebServer = MockWebServer()
 
     private lateinit var albumRepo: AlbumRepositoryImpl
@@ -46,6 +48,7 @@ class AlbumRepositoryImplTest{
         albumRepo = AlbumRepositoryImpl(dataSource, networkConnectivity)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `successfully fetches album list return success response`() = runTest {
         mockWebServer.enqueue(
@@ -55,8 +58,7 @@ class AlbumRepositoryImplTest{
         )
 
         val response = albumRepo.getAlbumList()
-
-        Assertions.assertThat(response.data?.get(0)?.id).isEqualTo(1)
+        assertThat(response.data?.get(0)?.id).isEqualTo(1)
     }
 
     @Test
@@ -69,7 +71,7 @@ class AlbumRepositoryImplTest{
 
         val response = albumRepo.getAlbumById(5)
 
-        Assertions.assertThat(response.data?.id).isEqualTo(10)
+        assertThat(response.data?.id).isEqualTo(10)
     }
 
     @Test
@@ -82,7 +84,7 @@ class AlbumRepositoryImplTest{
 
         val response = albumRepo.getAlbumList()
 
-        Assertions.assertThat(response.data).isNull()
+       assertThat(response.data).isNull()
     }
 
     @Test
@@ -95,11 +97,11 @@ class AlbumRepositoryImplTest{
 
         val response = albumRepo.getAlbumById(5)
 
-        Assertions.assertThat(response.data?.id).isNull()
-        Assertions.assertThat(response.data?.albumId).isNull()
-        Assertions.assertThat(response.data?.thumbnailUrl).isNull()
-        Assertions.assertThat(response.data?.title).isNull()
-        Assertions.assertThat(response.data?.url).isNull()
+        assertThat(response.data?.id).isNull()
+        assertThat(response.data?.albumId).isNull()
+        assertThat(response.data?.thumbnailUrl).isNull()
+        assertThat(response.data?.title).isNull()
+        assertThat(response.data?.url).isNull()
     }
 
     @After

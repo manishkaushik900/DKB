@@ -1,5 +1,6 @@
 package com.manish.dkb.domain.usecases
 
+import com.google.common.truth.Truth.assertThat
 import com.manish.dkb.domain.repository.AlbumRepository
 import com.manish.dkb.item1
 import com.manish.dkb.item2
@@ -9,11 +10,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions
+import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -26,14 +23,13 @@ class GetAlbumByIdUseCaseTest {
 
     private lateinit var getAlbumDetailUseCase: GetAlbumByIdUseCase
 
-    @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
 
-        getAlbumDetailUseCase = GetAlbumByIdUseCase(repo, Dispatchers.IO)
+        getAlbumDetailUseCase = GetAlbumByIdUseCase(repo, testDispatcher)
 
         Dispatchers.setMain(testDispatcher)
     }
@@ -46,8 +42,8 @@ class GetAlbumByIdUseCaseTest {
 
         val response = getAlbumDetailUseCase.execute(5)
 
-        Assertions.assertThat(response.data?.id).isEqualTo(1)
-        Assertions.assertThat(response.data).isEqualTo(item1)
+       assertThat(response.data?.id).isEqualTo(1)
+        assertThat(response.data).isEqualTo(item1)
     }
 
     @Test
@@ -58,8 +54,8 @@ class GetAlbumByIdUseCaseTest {
 
         val response = getAlbumDetailUseCase.execute(5)
 
-        Assertions.assertThat(response.data?.id).isNotEqualTo(2)
-        Assertions.assertThat(response.data).isNotEqualTo(item2)
+      assertThat(response.data?.id).isNotEqualTo(2)
+       assertThat(response.data).isNotEqualTo(item2)
     }
 
     @Test
@@ -70,14 +66,14 @@ class GetAlbumByIdUseCaseTest {
 
         val response = getAlbumDetailUseCase.execute(5)
 
-        Assertions.assertThat(response.data).isNull()
-        Assertions.assertThat(response.message).isEqualTo("Something Went Wrong")
+      assertThat(response.data).isNull()
+        assertThat(response.message).isEqualTo("Something Went Wrong")
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+//        testDispatcher.cleanupTestCoroutines()
     }
 
 }

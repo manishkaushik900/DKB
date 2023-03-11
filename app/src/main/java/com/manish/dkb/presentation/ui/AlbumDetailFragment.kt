@@ -10,12 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.manish.dkb.R
 import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.databinding.FragmentAlbumDetailBinding
 import com.manish.dkb.presentation.viewmodels.AlbumDetailViewModel
+import com.manish.dkb.utils.loadProfilePhoto
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,7 @@ class AlbumDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentAlbumDetailBinding
     private val viewModel: AlbumDetailViewModel by viewModels()
+    private val args: AlbumDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,9 +38,9 @@ class AlbumDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         try {
-            arguments?.getInt("photoId")?.let { initData(it) }
+//            arguments?.getInt("photoId")?.let { initData(it) }
+            initData(args.photoId)
         } catch (e: java.lang.Exception) {
             error(e.message.toString())
         }
@@ -86,13 +88,10 @@ class AlbumDetailFragment : Fragment() {
     /*set the data to view*/
     private fun setView(item: AlbumDtoItem) {
         try {
-            Glide.with(binding.root)
-                .load(item.url)
-                .transform(CircleCrop())
-                .into(binding.image)
+            binding.image.loadProfilePhoto(item.url,  binding.image.context)
             binding.title.text = item.title
         } catch (e: java.lang.Exception) {
-            Toast.makeText(requireActivity(), "Image Not Loaded", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), getString(R.string.msg_image_not_loaded), Toast.LENGTH_SHORT).show()
         }
 
     }

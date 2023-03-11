@@ -1,5 +1,6 @@
 package com.manish.dkb.domain.usecases
 
+import com.google.common.truth.Truth.assertThat
 import com.manish.dkb.domain.repository.AlbumRepository
 import com.manish.dkb.dummyAlbumListData
 import com.manish.dkb.item1
@@ -9,11 +10,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions.assertThat
+import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -25,14 +22,13 @@ class GetAlbumsUseCaseTest {
 
     private lateinit var getAlbumListUseCase: GetAlbumsUseCase
 
-    @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
 
-        getAlbumListUseCase = GetAlbumsUseCase(repo, Dispatchers.IO)
+        getAlbumListUseCase = GetAlbumsUseCase(repo, testDispatcher)
 
         Dispatchers.setMain(testDispatcher)
     }
@@ -64,7 +60,6 @@ class GetAlbumsUseCaseTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
     }
 
 }
