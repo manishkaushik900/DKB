@@ -1,5 +1,4 @@
-Hello DKB,
-Thank you for giving me this opportunity.
+Hello,
 Time Spent: 3,00 hours
 
 Two Things I solved well:
