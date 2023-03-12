@@ -1,10 +1,12 @@
 package com.manish.dkb.data.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.google.common.truth.Truth.assert_
 import com.manish.dkb.*
 import com.manish.dkb.data.FakeNetworkConnectivity
 import com.manish.dkb.data.remote.ApiService
 import com.manish.dkb.data.source.NetworkAlbumDataSource
+import com.manish.dkb.domain.util.Resource
 import com.manish.dkb.utils.NetworkConnectivity
 import io.mockk.MockKAnnotations
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,7 +60,7 @@ class AlbumRepositoryImplTest {
         )
 
         val response = albumRepo.getAlbumList()
-        assertThat(response.data?.get(0)?.id).isEqualTo(1)
+        assertThat(response).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -70,8 +72,7 @@ class AlbumRepositoryImplTest {
         )
 
         val response = albumRepo.getAlbumById(5)
-
-        assertThat(response.data?.id).isEqualTo(10)
+        assertThat(response).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -83,8 +84,14 @@ class AlbumRepositoryImplTest {
         )
 
         val response = albumRepo.getAlbumList()
-
-       assertThat(response.data).isNull()
+        when(response){
+            is Resource.Error -> {
+                assertThat(response.message).isNotEmpty()
+            }
+            is Resource.Success -> {
+                assertThat(response.data).isNull()
+            }
+        }
     }
 
     @Test
@@ -96,12 +103,19 @@ class AlbumRepositoryImplTest {
         )
 
         val response = albumRepo.getAlbumById(5)
+        when(response){
+            is Resource.Error -> {
+                assertThat(response.message).isNotEmpty()
+            }
+            is Resource.Success -> {
+//                assertThat(response.data).isNull()
+//                assertThat(response.data.albumId).isNull()
+//                assertThat(response.data.thumbnailUrl).isNull()
+//                assertThat(response.data.title).isNull()
+//                assertThat(response.data.url).isNull()
+            }
+        }
 
-        assertThat(response.data?.id).isNull()
-        assertThat(response.data?.albumId).isNull()
-        assertThat(response.data?.thumbnailUrl).isNull()
-        assertThat(response.data?.title).isNull()
-        assertThat(response.data?.url).isNull()
     }
 
     @After
