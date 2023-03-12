@@ -30,12 +30,12 @@ class AlbumViewModel @Inject constructor(
             _uiState.value = AlbumUiState.Loading
             when (val result = albumListUseCase.execute()) {
                 is Resource.Success -> {
-                    result.data?.let { data ->
+                    result.data.let { data ->
                         _uiState.value = AlbumUiState.AlbumListLoaded(data)
                     }
                 }
                 is Resource.Error -> {
-                    result.message?.let { error ->
+                    result.message.let { error ->
                         _uiState.emit(AlbumUiState.Error(error))
                     }
                 }
@@ -64,7 +64,7 @@ class AlbumViewModel @Inject constructor(
 
 sealed class AlbumUiState {
     object Loading : AlbumUiState()
-    class AlbumListLoaded(val albumList: List<AlbumDtoItem>) : AlbumUiState()
-    class Error(val message: String) : AlbumUiState()
+    data class AlbumListLoaded(val albumList: List<AlbumDtoItem>) : AlbumUiState()
+    data class Error(val message: String) : AlbumUiState()
 }
 }

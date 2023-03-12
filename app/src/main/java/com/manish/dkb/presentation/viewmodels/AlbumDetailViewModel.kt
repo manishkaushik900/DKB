@@ -23,13 +23,12 @@ class AlbumDetailViewModel @Inject constructor(
     fun getAlbumById(id:Int){
         viewModelScope.launch {
             _uiState.value = AlbumDetailUiState.Loading
-            val result = albumByIdUseCase.execute(id)
-            when(result){
+            when(val result = albumByIdUseCase.execute(id)){
                 is Resource.Success -> {
-                    result.data?.let {data -> _uiState.value = AlbumDetailUiState.AlbumDetailLoaded(data)}
+                    result.data.let { data -> _uiState.value = AlbumDetailUiState.AlbumDetailLoaded(data)}
                 }
                 is Resource.Error-> {
-                    result.message?.let { error -> _uiState.value = AlbumDetailUiState.Error(error) }
+                    result.message.let { error -> _uiState.value = AlbumDetailUiState.Error(error) }
                 }
             }
         }
