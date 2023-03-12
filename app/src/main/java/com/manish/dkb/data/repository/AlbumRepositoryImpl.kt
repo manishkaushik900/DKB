@@ -1,11 +1,10 @@
 package com.manish.dkb.data.repository
 
-import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.data.source.NetworkAlbumDataSource
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.domain.repository.AlbumRepository
 import com.manish.dkb.utils.NetworkConnectivity
-import com.manish.dkb.utils.Resource
-import retrofit2.Response
+import com.manish.dkb.domain.util.Resource
 import javax.inject.Inject
 
 /*Implementation of Album Repository*/
@@ -14,36 +13,31 @@ class AlbumRepositoryImpl @Inject constructor(
 ) : AlbumRepository {
 
     /*get album list from network data source*/
-    override suspend fun getAlbumList(): Resource<List<AlbumDtoItem>> {
-        return getResult { networkDataSource.getAlbumList() }
+    override suspend fun getAlbumList(): Resource<List<AlbumItem>> {
+        return try {
+            val result = networkDataSource.getAlbumList()
+
+            if (result.isNotEmpty()) {
+                Resource.Success(result)
+            } else {
+                Resource.Error(IllegalStateException("Empty product list").message.toString())
+            }
+
+        } catch (e: Exception) {
+            Resource.Error(e.message.toString())
+        }
+
     }
 
     /*get album by photo id from network data source*/
-    override suspend fun getAlbumById(id: Int): Resource<AlbumDtoItem> {
-        return getResult { networkDataSource.getAlbumById(id) }
-    }
+    override suspend fun getAlbumById(id: Int): Resource<AlbumItem> {
+        return try {
+            val result = networkDataSource.getAlbumById(id)
 
-    /*common high order function to get the result*/
-    private suspend fun <T> getResult(call: suspend () -> Response<T>): Resource<T> {
-//        if (!network.isNetworkAvailable()) {
-//            return error("No Internet Connection")
-//        }
+            Resource.Success(result)
 
-        try {
-            val response = call()
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) return Resource.Success(body)
-            }
-            return error(" ${response.code()} ${response.message()}")
         } catch (e: Exception) {
-            return error(e.message ?: e.toString())
+            Resource.Error(e.message.toString())
         }
     }
-
-    /*common method to get the error*/
-    private fun <T> error(message: String): Resource<T> {
-        return Resource.Error("Error: $message")
-    }
-
 }

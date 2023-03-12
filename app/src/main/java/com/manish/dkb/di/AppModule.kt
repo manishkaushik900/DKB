@@ -18,6 +18,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
@@ -82,7 +83,18 @@ class AppModule {
 
     @Provides
     @Singleton
+    @DispatcherIO
     fun provideIoDispatcher(): CoroutineContext = Dispatchers.IO
+
+    @Provides
+    @Singleton
+    @DispatcherMain
+    fun provideMainDispatcher(): CoroutineContext = Dispatchers.Main
+
+    @Provides
+    @Singleton
+    @DispatcherDefault
+    fun provideDefaultDispatcher(): CoroutineContext = Dispatchers.Default
 
 
     @Provides

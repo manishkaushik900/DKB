@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.databinding.AlbumItemRowBinding
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.utils.loadProfilePhoto
 
 /*Adapter to populate the list to album fragment*/
@@ -16,9 +16,9 @@ class AlbumAdapter(private val listener: AlbumItemListener) : RecyclerView.Adapt
         fun onClickedAlbum(photoId: Int)
     }
 
-    private val items = ArrayList<AlbumDtoItem>()
+    private val items = ArrayList<AlbumItem>()
 
-    fun setItems(items: List<AlbumDtoItem>) {
+    fun setItems(items: List<AlbumItem>) {
         this.items.clear()
         this.items.addAll(items)
         notifyDataSetChanged()
@@ -48,22 +48,22 @@ class AlbumViewHolder(
 ) : RecyclerView.ViewHolder(itemBinding.root),
     View.OnClickListener {
 
-    private lateinit var albumItem: AlbumDtoItem
+    private lateinit var albumItem: AlbumItem
 
     init {
         itemBinding.root.setOnClickListener(this)
     }
 
     @SuppressLint("SetTextI18n")
-    fun bind(item: AlbumDtoItem) {
+    fun bind(item: AlbumItem) {
         this.albumItem = item
         itemBinding.title.text = item.title
-        itemBinding.photoId.text = "${item.id}"
+        itemBinding.photoId.text = "${item.albumId}"
         itemBinding.image.loadProfilePhoto(item.thumbnailUrl, itemBinding.image.context)
     }
 
     override fun onClick(v: View?) {
-        listener.onClickedAlbum(albumItem.id!!)
+        listener.onClickedAlbum(albumItem.albumId!!)
     }
 }
 

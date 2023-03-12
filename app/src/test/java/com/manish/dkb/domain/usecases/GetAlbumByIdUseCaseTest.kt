@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.manish.dkb.domain.repository.AlbumRepository
 import com.manish.dkb.item1
 import com.manish.dkb.item2
-import com.manish.dkb.utils.Resource
+import com.manish.dkb.domain.util.Resource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

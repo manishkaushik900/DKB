@@ -13,8 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.manish.dkb.R
-import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.databinding.FragmentAlbumDetailBinding
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.presentation.viewmodels.AlbumDetailViewModel
 import com.manish.dkb.utils.loadProfilePhoto
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +65,7 @@ class AlbumDetailFragment : Fragment() {
         }
     }
 
-    private fun onAlbumLoaded(album: AlbumDtoItem) {
+    private fun onAlbumLoaded(album: AlbumItem) {
         hideLoading()
         setView(album)
     }
@@ -86,7 +86,7 @@ class AlbumDetailFragment : Fragment() {
     }
 
     /*set the data to view*/
-    private fun setView(item: AlbumDtoItem) {
+    private fun setView(item: AlbumItem) {
         try {
             binding.image.loadProfilePhoto(item.url,  binding.image.context)
             binding.title.text = item.title

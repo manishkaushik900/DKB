@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.manish.dkb.data.remote.models.AlbumDtoItem
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.presentation.viewmodels.AlbumDetailViewModel
 
 @Composable
@@ -83,7 +84,7 @@ fun ObserveDataAndPopulateView(viewModel: AlbumDetailViewModel, modifier: Modifi
 }
 
 @Composable
-fun ShowAlbumDetail(album: AlbumDtoItem) {
+fun ShowAlbumDetail(album: AlbumItem) {
 
     Card(
         elevation = 10.dp,

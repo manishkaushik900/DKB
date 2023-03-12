@@ -20,10 +20,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import com.manish.dkb.data.remote.models.AlbumDtoItem
+import com.manish.dkb.domain.models.AlbumItem
 
 
 @Composable
-fun AlbumListItem(item: AlbumDtoItem, clickListener: (AlbumDtoItem) -> Unit) {
+fun AlbumListItem(item: AlbumItem, clickListener: (AlbumItem) -> Unit) {
 
     ConstraintLayout(
         modifier = Modifier
@@ -52,7 +53,7 @@ fun AlbumListItem(item: AlbumDtoItem, clickListener: (AlbumDtoItem) -> Unit) {
 
         )
         Text(
-            text = item.id.toString(),
+            text = item.albumId.toString(),
             style = MaterialTheme.typography.caption,
             modifier = Modifier.constrainAs(title) {
                 start.linkTo(image.end, 16.dp)
@@ -74,6 +75,6 @@ fun AlbumListItem(item: AlbumDtoItem, clickListener: (AlbumDtoItem) -> Unit) {
 @Composable
 @Preview
 fun PreviewGmailItem() {
-    val item = albumDtoSample
-    AlbumListItem(item = item){}
+//    val item = albumDtoSample
+//    AlbumListItem(item = item){}
 }

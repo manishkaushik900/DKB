@@ -2,9 +2,9 @@ package com.manish.dkb.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.manish.dkb.data.remote.models.AlbumDtoItem
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.domain.usecases.GetAlbumByIdUseCase
-import com.manish.dkb.utils.Resource
+import com.manish.dkb.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +36,7 @@ class AlbumDetailViewModel @Inject constructor(
 
     sealed class AlbumDetailUiState {
         object Loading : AlbumDetailUiState()
-        class AlbumDetailLoaded(val album: AlbumDtoItem) : AlbumDetailUiState()
+        class AlbumDetailLoaded(val album: AlbumItem) : AlbumDetailUiState()
         class Error(val message: String) : AlbumDetailUiState()
     }
 

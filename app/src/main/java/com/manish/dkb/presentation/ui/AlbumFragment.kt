@@ -13,8 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.manish.dkb.R
-import com.manish.dkb.data.remote.models.AlbumDtoItem
 import com.manish.dkb.databinding.FragmentAlbumBinding
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.presentation.adapter.AlbumAdapter
 import com.manish.dkb.presentation.viewmodels.AlbumViewModel
 import com.manish.dkb.presentation.viewmodels.AlbumViewModel.AlbumUiState
@@ -90,7 +90,7 @@ class AlbumFragment: Fragment(), AlbumAdapter.AlbumItemListener {
     }
 
     /*populate the album list data to adapter list*/
-    private fun onAlbumListLoaded(albumList: List<AlbumDtoItem>) {
+    private fun onAlbumListLoaded(albumList: List<AlbumItem>) {
         hideLoading()
         adapter.setItems(albumList)
     }

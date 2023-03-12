@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.manish.dkb.R
 import com.manish.dkb.data.remote.models.AlbumDtoItem
+import com.manish.dkb.domain.models.AlbumItem
 import com.manish.dkb.presentation.ui.compose.AlbumListItem
 import com.manish.dkb.presentation.viewmodels.AlbumViewModel
 import com.manish.dkb.utils.Network
@@ -83,7 +84,7 @@ fun FetchData(navigateToAlbumDetail: (id: Int) -> Unit, modifier: Modifier = Mod
 }
 
 @Composable
-fun AlbumList(listState: List<AlbumDtoItem>, navigateToAlbumDetail: (id: Int) -> Unit) {
+fun AlbumList(listState: List<AlbumItem>, navigateToAlbumDetail: (id: Int) -> Unit) {
     val lazyListState = rememberLazyListState()
     val context = LocalContext.current
     val networkConnectivity: NetworkConnectivity = Network(context)
@@ -105,7 +106,7 @@ fun AlbumList(listState: List<AlbumDtoItem>, navigateToAlbumDetail: (id: Int) ->
 
             AlbumListItem(item = listState[it]) { item ->
                 if (networkConnectivity.isNetworkAvailable()) {
-                    navigateToAlbumDetail(item.id!!)
+                    navigateToAlbumDetail(item.albumId!!)
                 }else{
                     Toast.makeText(context, context.getText(R.string.msg_no_internet), Toast.LENGTH_SHORT).show()
                 }
