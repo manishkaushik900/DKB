@@ -84,6 +84,10 @@ dependencies {
     //    Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+//    Koin
+    implementation "io.insert-koin:koin-android:$koin_version"
+
     //    Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
@@ -120,11 +124,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     debugImplementation "androidx.test:monitor:1.6.1"
-//    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
-//    androidTestImplementation "org.mockito:mockito-core:3.4.6"
-//    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.44'
-//    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.44'
-//    androidTestImplementation "androidx.navigation:navigation-testing:2.5.3"
 }
